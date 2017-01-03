@@ -63,8 +63,11 @@ class WhiteNoiseLoad(TimeSeriesLoad):
                 steps: The number of the load steps
                 std: The standard deviation
         """
+        psspy.bsys(1, 0, [0.0, 0.0], 0, [], 1, [self.bus_id], 0, [], 0, [])
+        base = psspy.alodbusreal(sid=1, flag=2, string='O_TOTALACT')
+
         super(WhiteNoiseLoad, self).__init__(bus_id,
-                                             np.random.normal(0, std, size=steps))
+                                             np.random.normal(0, std*base, size=steps))
         self.std = std
 
 
