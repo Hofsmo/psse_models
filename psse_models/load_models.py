@@ -65,8 +65,13 @@ class WhiteNoiseLoad(TimeSeriesLoad):
                 std: The standard deviation
         """
         base = wrappers.get_total_bus_load(bus_id)
-        super(WhiteNoiseLoad, self).__init__(bus_id,
-                                             np.random.normal(0, std*base, size=steps))
+        std = std*abs(base)
+        if std > 0:
+            steps = np.random.normal(0, std, size=steps)
+        else:
+            steps = [0.0] * steps
+
+        super(WhiteNoiseLoad, self).__init__(bus_id, steps)
         self.std = std
 
 
