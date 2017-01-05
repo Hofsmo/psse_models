@@ -61,12 +61,10 @@ class WhiteNoiseLoad(TimeSeriesLoad):
         """Constructor
             Input:
                 bus_id: The number of the bus to model
-                steps: The number of the load steps
+                steps: The number of the load steps in p.u.
                 std: The standard deviation
         """
-        wrappers.one_bus_subsys(1, bus_id)
-        base = psspy.alodbusreal(sid=1, flag=2, string='O_TOTALACT')[1][0][0]
-
+        base = wrappers.get_total_bus_load(bus_id)
         super(WhiteNoiseLoad, self).__init__(bus_id,
                                              np.random.normal(0, std*base, size=steps))
         self.std = std
