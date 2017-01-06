@@ -7,6 +7,7 @@ Created on Wed Dec 14 12:14:50 2016
 
 
 import psspy
+from psse_models import wrappers
 import numpy as np
 _i = psspy.getdefaultint()
 
@@ -28,7 +29,7 @@ class Load(object):
             Input:
                 value: the load increase or decrease
         """
-        psspy.bsys(1, 0, [0.0, 0.0], 0, [], 1, [self.bus_id], 0, [], 0, [])
+        wrappers.one_bus_subsys(1, self.bus_id)
         psspy.scal_2(1, 0, 1, [0, 0, 0, 0, 0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         psspy.scal_2(0, 1, 2, [_i, 3, 1, 1, 0], [value, 0, 0.0, -.0, 0.0, -.0, 0.0])
 
@@ -60,14 +61,17 @@ class WhiteNoiseLoad(TimeSeriesLoad):
         """Constructor
             Input:
                 bus_id: The number of the bus to model
-                steps: The number of the load steps
+                steps: The number of the load steps in p.u.
                 std: The standard deviation
         """
-        psspy.bsys(1, 0, [0.0, 0.0], 0, [], 1, [self.bus_id], 0, [], 0, [])
-        base = psspy.alodbusreal(sid=1, flag=2, string='O_TOTALACT')
+        base = wrappers.get_total_bus_load(bus_id)
+        std = std*abs(base)
+        if std > 0:
+            steps = np.random.normal(0, std, size=steps)
+        else:
+            steps = [0.0] * steps
 
-        super(WhiteNoiseLoad, self).__init__(bus_id,
-                                             np.random.normal(0, std*base, size=steps))
+        super(WhiteNoiseLoad, self).__init__(bus_id, steps)
         self.std = std
 
 
