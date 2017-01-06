@@ -89,5 +89,5 @@ ENV/
 .ropeproject
 
 # vim stuff
-.swp
-.swo
+*.swp
+*.swo
