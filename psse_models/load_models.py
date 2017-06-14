@@ -28,9 +28,12 @@ class Load(object):
             Input:
                 value: the load increase or decrease
         """
-        psspy.bsys(1, 0, [0.0, 0.0], 0, [], 1, [self.bus_id], 0, [], 0, [])
-        psspy.scal_2(1, 0, 1, [0, 0, 0, 0, 0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-        psspy.scal_2(0, 1, 2, [_i, 3, 1, 1, 0], [value, 0, 0.0, -.0, 0.0, -.0, 0.0])
+        psspy.bsys(1, 0, [0.0, 0.0], 0, [], 1,
+                   [self.bus_id], 0, [], 0, [])
+        psspy.scal_2(1, 0, 1, [0, 0, 0, 0, 0],
+                     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        psspy.scal_2(0, 1, 2, [_i, 3, 1, 1, 0],
+                     [value, 0, 0.0, -.0, 0.0, -.0, 0.0])
 
 
 class TimeSeriesLoad(Load):
@@ -63,11 +66,15 @@ class WhiteNoiseLoad(TimeSeriesLoad):
                 steps: The number of the load steps
                 std: The standard deviation
         """
+        self.bus_id = bus_id
         psspy.bsys(1, 0, [0.0, 0.0], 0, [], 1, [self.bus_id], 0, [], 0, [])
-        base = psspy.alodbusreal(sid=1, flag=2, string='O_TOTALACT')
+        base = psspy.alodbusreal(sid=1, flag=2, string='O_TOTALACT')[1][0][0]
+        self.base = base
 
         super(WhiteNoiseLoad, self).__init__(bus_id,
-                                             np.random.normal(0, std*base, size=steps))
+                                             np.random.normal(0,
+                                                              std*base,
+                                                              size=steps))
         self.std = std
 
 
