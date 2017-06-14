@@ -30,8 +30,10 @@ class Load(object):
                 value: the load increase or decrease
         """
         wrappers.one_bus_subsys(1, self.bus_id)
-        psspy.scal_2(1, 0, 1, [0, 0, 0, 0, 0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-        psspy.scal_2(0, 1, 2, [_i, 3, 1, 1, 0], [value, 0, 0.0, -.0, 0.0, -.0, 0.0])
+        psspy.scal_2(1, 0, 1, [0, 0, 0, 0, 0],
+                     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        psspy.scal_2(0, 1, 2, [_i, 3, 1, 1, 0],
+                     [value, 0, 0.0, -.0, 0.0, -.0, 0.0])
 
 
 class TimeSeriesLoad(Load):
@@ -72,6 +74,7 @@ class WhiteNoiseLoad(TimeSeriesLoad):
             steps = [0.0] * steps
 
         super(WhiteNoiseLoad, self).__init__(bus_id, steps)
+
 
 class WienerProcessLoad(WhiteNoiseLoad):
     """Load that behaves like a Wiener process."""
