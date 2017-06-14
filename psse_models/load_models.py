@@ -64,17 +64,6 @@ class WhiteNoiseLoad(TimeSeriesLoad):
                 steps: The number of the load steps in p.u.
                 std: The standard deviation
         """
-<<<<<<< HEAD
-        self.bus_id = bus_id
-        psspy.bsys(1, 0, [0.0, 0.0], 0, [], 1, [self.bus_id], 0, [], 0, [])
-        base = psspy.alodbusreal(sid=1, flag=2, string='O_TOTALACT')[1][0][0]
-        self.base = base
-
-        super(WhiteNoiseLoad, self).__init__(bus_id,
-                                             np.random.normal(0,
-                                                              std*base,
-                                                              size=steps))
-=======
         base = wrappers.get_total_bus_load(bus_id)
         std = std*abs(base)
         if std > 0:
@@ -83,9 +72,6 @@ class WhiteNoiseLoad(TimeSeriesLoad):
             steps = [0.0] * steps
 
         super(WhiteNoiseLoad, self).__init__(bus_id, steps)
->>>>>>> 98cfd394771ee08b36b59f83dea20864adefd647
-        self.std = std
-
 
 class WienerProcessLoad(WhiteNoiseLoad):
     """Load that behaves like a Wiener process."""
