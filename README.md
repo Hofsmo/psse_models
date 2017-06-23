@@ -31,3 +31,6 @@ All the load models are tested. The tests are compatible with pytest.
 
 ## Installation
 It should be possible to install the module using setuptools
+
+# Tips for setting up psspy 
+I normally follow the second highest rated answer to this thread https://psspy.org/psse-help-forum/question/122/how-do-i-import-the-psspy-module-in-a-python-script/ . The highest rated answer requires one to add some boileplate code to each script, the second highest has a solution which avoids this.
